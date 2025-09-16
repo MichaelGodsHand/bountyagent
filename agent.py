@@ -33,10 +33,10 @@ if not AGENTVERSE_API_KEY:
 # Initialize agent
 agent = Agent(
     name="bounty_suggestion_agent",
-    port=8007,
+    port=8080,
     seed="bounty suggestion agent seed",
     mailbox=True,
-    endpoint=["http://localhost:8007/submit"]
+    endpoint=["http://localhost:8080/submit"]
 )
 
 # REST API Models
@@ -88,16 +88,18 @@ received_metrics = {}
 
 class LLM:
     def __init__(self, api_key):
+        # Using OpenAI client to connect to ASI:One API (OpenAI-compatible interface)
         from openai import OpenAI
         self.client = OpenAI(
             api_key=api_key,
-            base_url="https://api.asi1.ai/v1"
+            base_url="https://api.asi1.ai/v1"  # ASI:One API endpoint
         )
 
     def create_completion(self, prompt):
+        # Using ASI:One model via OpenAI-compatible API
         completion = self.client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
-            model="asi1-mini"
+            model="asi1-mini"  # ASI:One model
         )
         return completion.choices[0].message.content
 
@@ -472,13 +474,14 @@ async def startup_handler(ctx: Context):
     llm_client = LLM(ASI_ONE_API_KEY)
     ctx.logger.info(f"Bounty Suggestion Agent started with address: {ctx.agent.address}")
     ctx.logger.info("Agent is ready to generate bounty suggestions based on brand analysis!")
+    ctx.logger.info("🧠 Using ASI:One AI reasoning (asi1-mini model) for bounty generation")
     ctx.logger.info("🤖 Direct agent communication enabled - will receive metrics from brand-metrics-agent")
     ctx.logger.info("🚀 AUTO-GENERATION ENABLED - bounties will be generated immediately upon receiving metrics!")
     ctx.logger.info("REST API endpoints available:")
-    ctx.logger.info("- POST http://localhost:8007/bounty/generate")
-    ctx.logger.info("- GET  http://localhost:8007/metrics/received")
-    ctx.logger.info("- GET  http://localhost:8007/bounties/auto-generated")
-    ctx.logger.info("- GET  http://localhost:8007/bounties/auto-generated/{brand_name}")
+    ctx.logger.info("- POST http://localhost:8080/bounty/generate")
+    ctx.logger.info("- GET  http://localhost:8080/metrics/received")
+    ctx.logger.info("- GET  http://localhost:8080/bounties/auto-generated")
+    ctx.logger.info("- GET  http://localhost:8080/bounties/auto-generated/{brand_name}")
     ctx.logger.info("Message handlers available:")
     ctx.logger.info("- MetricsData: Receives brand metrics from brand-metrics-agent and auto-generates bounties")
 
@@ -742,16 +745,16 @@ if __name__ == '__main__':
     print("🚀 Starting Bounty Suggestion Agent...")
     print(f"✅ Agent address: {agent.address}")
     print("📡 Ready to generate bounty suggestions based on brand analysis")
-    print("🧠 Powered by ASI:One AI reasoning and brand research data")
+    print("🧠 Powered by ASI:One AI reasoning (asi1-mini model) and brand research data")
     print("🤖 A2A Communication enabled - will receive metrics from brand-metrics-agent")
     print("🚀 AUTO-GENERATION ENABLED - bounties generated immediately upon receiving metrics!")
     print(f"🔗 Bounty Agent Address for A2A: {agent.address}")
     print("\n🌐 REST API Endpoints:")
-    print("POST http://localhost:8007/bounty/generate")
+    print("POST http://localhost:8080/bounty/generate")
     print("Body: {\"brand_name\": \"Tesla\"}")
-    print("GET  http://localhost:8007/metrics/received")
-    print("GET  http://localhost:8007/bounties/auto-generated")
-    print("GET  http://localhost:8007/bounties/auto-generated/Tesla")
+    print("GET  http://localhost:8080/metrics/received")
+    print("GET  http://localhost:8080/bounties/auto-generated")
+    print("GET  http://localhost:8080/bounties/auto-generated/Tesla")
     print("\n🧪 Test queries:")
     print("- 'generate bounties for Tesla'")
     print("- 'bounties for Apple'")
