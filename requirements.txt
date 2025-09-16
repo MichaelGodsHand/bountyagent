@@ -4,3 +4,4 @@ hyperon
 requests
 python-dotenv
 pydantic
+openai
