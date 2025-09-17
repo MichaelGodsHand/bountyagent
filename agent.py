@@ -115,7 +115,7 @@ class BrandRAG:
     def __init__(self, metta_instance):
         self.metta = metta_instance
         # Knowledge graph base URL
-        self.kg_base_url = "https://orchestrator-739298578243.us-central1.run.app"
+        self.kg_base_url = "https://streaming-739298578243.us-central1.run.app"
     
     def get_brand_summary(self, brand_name: str) -> Dict:
         """Get comprehensive brand summary from knowledge graph."""
